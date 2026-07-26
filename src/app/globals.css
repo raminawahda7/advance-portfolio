@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---- Theme tokens (light default) ---- */
+:root {
+  --bg: #fdfbf7; /* ultra-warm alabaster cream */
+  --fg: #121212; /* deep ink black — main text */
+  --muted: #3a3a3a; /* charcoal body text */
+  --accent: #ff3e6c; /* neon pink/red */
+  --line: #121212; /* borders, rules, bullets, hard shadows */
+  --blueprint: rgba(18, 18, 18, 0.06); /* faint grid lines */
+  color-scheme: light;
+}
+
+/* ---- Dark theme (opt-in via .dark on <html>) ---- */
+html.dark {
+  --bg: #16150f; /* warm near-black */
+  --fg: #fdfbf7; /* cream text */
+  --muted: #a8a49a; /* warm gray */
+  --accent: #ff3e6c; /* pink stays */
+  --line: #fdfbf7; /* cream outlines + shadows on dark */
+  --blueprint: rgba(253, 251, 247, 0.07);
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Neon-pink selection */
+::selection {
+  background: rgba(255, 62, 108, 0.28);
+  color: var(--fg);
+}
+
+/* Thick, hard-edged scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+  border-left: 2px solid var(--line);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border: 3px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+@layer base {
+  /* Syne (extra bold) for display headings */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-syne), system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  /* Brutalist container: thick outline + hard offset shadow */
+  .brutal-box {
+    @apply border-2 border-ink bg-bg rounded-none;
+    box-shadow: 4px 4px 0px 0px var(--line);
+  }
+
+  /* Tactile press-in hover for interactive boxes/buttons */
+  .brutal-tap {
+    @apply transition-all duration-150 ease-out;
+  }
+  .brutal-tap:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px var(--line);
+  }
+
+  /* Solid pink call-to-action button (e.g. Download CV) */
+  .brutal-btn {
+    @apply inline-flex items-center gap-2 border-2 border-ink bg-accent px-4 py-2
+           font-mono text-xs font-bold uppercase tracking-wider text-ink
+           rounded-none transition-all duration-150 ease-out;
+    box-shadow: 4px 4px 0px 0px var(--line);
+  }
+  .brutal-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px var(--line);
+  }
+
+  /* Tag pill — thin outline, solid pink marker, sharp corners */
+  .pill {
+    @apply inline-flex items-center gap-1.5 border border-ink bg-bg px-2.5 py-1
+           font-mono text-[11px] font-medium uppercase tracking-wider text-text-primary
+           transition-colors duration-150;
+  }
+  .pill::before {
+    content: "";
+    @apply h-1.5 w-1.5 shrink-0 bg-accent;
+  }
+  .pill:hover {
+    @apply border-accent;
+  }
+
+  /* Section label, tracked out, neon-pink */
+  .section-label {
+    @apply font-mono text-xs font-normal uppercase tracking-[0.25em] text-accent;
+  }
+
+  /* Structural rule between sections */
+  .grid-divider {
+    @apply border-t-2 border-ink;
+  }
+}

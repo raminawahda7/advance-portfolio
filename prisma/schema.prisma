@@ -1,0 +1,71 @@
+// Prisma schema.
+//
+// Local dev uses SQLite. To move to Postgres/Supabase for production:
+//   1. Change `provider` below from "sqlite" to "postgresql".
+//   2. Point DATABASE_URL (in .env) at your Postgres/Supabase connection string.
+//   3. Run `npx prisma migrate deploy` (or `prisma db push`) + `npm run db:seed`.
+// The models below use only portable types (String/DateTime/Int/Boolean), so no
+// model changes are needed on swap. `kind` is a String (not a Prisma enum) so the
+// same schema compiles on SQLite, which does not support native enums.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// Singleton row describing the site owner (hero + summary + footer contact).
+model Profile {
+  id        String   @id @default("singleton")
+  name      String
+  title     String
+  tagline   String
+  summary   String
+  location  String
+  email     String
+  github    String
+  linkedin  String
+  /// Public path or URL to a downloadable CV/resume (e.g. /Rami_Nawahda_CV.pdf).
+  resumeUrl String   @default("")
+  updatedAt DateTime @updatedAt
+}
+
+/// Work experience OR education. Distinguished by `kind`.
+/// kind: "experience" | "education".
+model Entry {
+  id           String    @id @default(cuid())
+  kind         String    @default("experience")
+  title        String
+  company      String
+  location     String
+  startDate    DateTime
+  endDate      DateTime? // null == "Present"
+  /// Newline-separated bullet points.
+  description  String    @default("")
+  /// Short one/two-line brief about the company (shown on card hover).
+  blurb        String    @default("")
+  /// Company website; makes the company name a clickable link.
+  companyUrl   String    @default("")
+  /// Comma-separated tech tags.
+  techStack    String    @default("")
+  /// Manual override for ordering. Auto-computed from startDate when not overridden.
+  displayOrder Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([kind, startDate])
+}
+
+/// A named group of skills (e.g. "Frontend"), rendered as terminal badge groups.
+model SkillGroup {
+  id         String   @id @default(cuid())
+  name       String
+  /// Comma-separated skills.
+  skills     String   @default("")
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
