@@ -38,7 +38,7 @@ async function main() {
       blurb:
         "Transforming healthcare claims management across the GCC through cutting-edge AI and deep regional expertise — redefining e-claims for speed, intelligence, and precision.",
       startDate: d(2024, 1),
-      endDate: null,
+      endDate: d(2026, 8),
       description: [
         "Leading development of an AI-powered healthcare analytics platform using Python, FastAPI, and React",
         "Built data pipelines using pandas and NumPy for healthcare data analysis",
